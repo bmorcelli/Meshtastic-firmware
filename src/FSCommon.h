@@ -35,7 +35,9 @@ using namespace STM32_LittleFS_Namespace;
 // ESP32 version
 #include "LittleFS.h"
 #define FSCom LittleFS
-#define FSBegin() FSCom.begin(true) // format on failure
+// Tries to mount the new "mesht" spiffs labelled partition, if it fails try to mount the default "spiffs"
+// The fallback is usefull when updating OTA, where partition scheme is not touched
+#define FSBegin() ((FSCom.begin(true, "/littlefs", 10, "mesht") == false) ? FSCom.begin(true) : true)
 #define FILE_O_WRITE "w"
 #define FILE_O_READ "r"
 #endif

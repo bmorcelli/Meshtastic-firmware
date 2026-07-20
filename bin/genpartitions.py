@@ -6,7 +6,7 @@
 # otadata,  data, ota,     , 0x2000,
 # app0,     app,  ota_0,   , 0x1c0000,
 # app1,     app,  ota_1,   , 0x1c0000,
-# spiffs,   data, spiffs,  , 0x06f000,
+# mesht,    data, spiffs,  , 0x06f000,
 
 start = 0x9000
 nvssys = 0x3000
@@ -36,6 +36,6 @@ nvs,      data, nvs,     0x{start:x},  0x{nvs:x},
 otadata,  data, ota,     , 0x{ota:x},
 app0,     app,  ota_0,   , 0x{app:x},
 app1,     app,  ota_1,   , 0x{app:x},
-spiffs,   data, spiffs,  , 0x{spi:x} """.format(**locals())
+mesht,    data, spiffs,  , 0x{spi:x} """.format(**locals())
 
 print(table)
