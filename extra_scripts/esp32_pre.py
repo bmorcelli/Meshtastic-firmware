@@ -4,8 +4,32 @@
 import json
 import sys
 from os.path import isfile
+from pathlib import Path
 
 Import("env")
+
+
+def patch_framework_partitions(env):
+    framework_dir = env.PioPlatform().get_package_dir("framework-arduinoespressif32")
+    partitions_dir = Path(framework_dir) / "tools" / "partitions"
+    patched = partitions_dir / "patched"
+
+    # Before the project build starts, patch the Arduino-ESP32 framework partition
+    # tables by renaming all "spiffs" partition entries to "mesht". This patch is
+    # applied only once per framework installation, using a marker file to avoid
+    # repeated modifications.
+    if not patched.exists():
+        env.Execute(f"sed -i 's/spiffs/mesht/' {partitions_dir}/*.csv")
+        patched.touch()
+
+    # Then copy any custom partition CSV files from the project root into the
+    # framework's partition directory so PlatformIO can use them during compilation.
+    project_dir = Path(env.subst("$PROJECT_DIR"))
+    for csv_file in project_dir.glob("*.csv"):
+        env.Execute(f"cp {csv_file} {partitions_dir / csv_file.name}")
+
+
+patch_framework_partitions(env)
 
 
 # From https://github.com/platformio/platform-espressif32/blob/develop/builder/main.py

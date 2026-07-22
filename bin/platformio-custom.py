@@ -137,7 +137,7 @@ def manifest_gather(source, target, env):
     # Maps the filename pattern to the partition name where it should be flashed
     partition_map = {
         f"{progname}.bin": "app0",              # primary application slot (app0 / OTA_0)
-        lfsbin: "spiffs",                        # filesystem image flashed to spiffs
+        lfsbin: "mesht",                        # filesystem image flashed to mesht labeled spiffs partition
     }
     
     check_paths = [
